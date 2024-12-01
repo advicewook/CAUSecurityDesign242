@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",               // 项目中的所有文件
+                "/opt/homebrew/Cellar/boost/1.86.0_2/include" // Boost 头文件路径
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang++",         // 设置您的编译器路径
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"      // IntelliSense 模式
+        }
+    ],
+    "version": 4
+}
