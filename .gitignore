@@ -362,3 +362,32 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore build artifacts and generated files
+/build/
+/CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ignore user-specific configuration files
+.idea/
+.vs/
+compile_commands.json
+
+# Ignore log and temporary files
+*.log
+*.tmp
+
+# Ignore executable and other binary files
+*.exe
+*.out
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+
+# Ignore Visual Studio Code files and directories
+.vscode/
+*.code-workspace

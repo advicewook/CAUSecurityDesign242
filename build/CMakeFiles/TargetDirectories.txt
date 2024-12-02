@@ -1,3 +1,0 @@
-/Users/kun/Desktop/ConnectionDemo/build/CMakeFiles/ConnectionDemo.dir
-/Users/kun/Desktop/ConnectionDemo/build/CMakeFiles/edit_cache.dir
-/Users/kun/Desktop/ConnectionDemo/build/CMakeFiles/rebuild_cache.dir

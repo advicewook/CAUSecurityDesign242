@@ -4,6 +4,7 @@
 
 using namespace boost::asio;
 using ip::tcp;
+using namespace std;
 
 void startClient() {
     try {
