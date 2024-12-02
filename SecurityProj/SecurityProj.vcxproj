@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\boost_1_86_0;C:\Program Files\MySQL\MySQL Server 8.0\include;C:\Program Files\MySQL\MySQL Connector C++ 9.1\include\jdbc;C:\Program Files\MySQL\mysql-connector-c++-9.1.0-winx64\include\jdbc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\MySQL\MySQL Server 8.0\lib;C:\Program Files\MySQL\MySQL Connector C++ 9.1\lib64\vs14;C:\Program Files\MySQL\mysql-connector-c++-9.1.0-winx64\lib64\vs14;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\boost_1_86_0;C:\Program Files\MySQL\MySQL Server 8.0\include;C:\Program Files\MySQL\mysql-connector-c++-9.1.0-winx64\include;C:\Program Files (x86)\OpenFHE\include\openfhe;C:\Program Files (x86)\OpenFHE\include\openfhe\binfhe;C:\Program Files (x86)\OpenFHE\include\openfhe\cereal;C:\Program Files (x86)\OpenFHE\include\openfhe\core;C:\Program Files (x86)\OpenFHE\include\openfhe\pke;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\MySQL\MySQL Server 8.0\lib;C:\Program Files\MySQL\mysql-connector-c++-9.1.0-winx64\lib64;C:\boost_1_86_0\libs;C:\Program Files (x86)\OpenFHE\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\boost_1_86_0;C:\Program Files\MySQL\MySQL Server 8.0\include;C:\Program Files\MySQL\MySQL Connector C++ 9.1\include\jdbc;C:\Program Files\MySQL\mysql-connector-c++-9.1.0-winx64\include\jdbc;$(IncludePath)</IncludePath>
@@ -115,12 +115,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <AdditionalIncludeDirectories>C:\boost_1_86_0;C:\Program Files (x86)\OpenFHE\include;C:\Program Files\MySQL\MySQL Server 8.0\include;C:\Program Files\MySQL\mysql-connector-c++-9.1.0-winx64\include;C:\Program Files (x86)\OpenFHE\include\openfhe;C:\Program Files (x86)\OpenFHE\include\openfhe\binfhe;C:\Program Files (x86)\OpenFHE\include\openfhe\cereal;C:\Program Files (x86)\OpenFHE\include\openfhe\core;C:\Program Files (x86)\OpenFHE\include\openfhe\pke;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\boost_1_86_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libmysql.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\boost_1_86_0\stage\lib;C:\Program Files (x86)\OpenFHE\lib;C:\Program Files\MySQL\MySQL Server 8.0\lib;C:\Program Files\MySQL\mysql-connector-c++-9.1.0-winx64\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,12 +132,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\boost_1_86_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\boost_1_86_0\libs</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

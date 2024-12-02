@@ -1,7 +1,6 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "openfhe.h"
 #include <boost/asio.hpp>
 #include <iostream>
 #include "openfhe.h"

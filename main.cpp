@@ -1,10 +1,5 @@
 #pragma comment (lib, "libmysql.lib")
 
-#ifdef _DEBUG
-#pragma comment(lib, "mysqlcppconn.lib")
-#else
-#pragma comment(lib, "MySQL\\Release\\mysqlcppconn.lib")
-#endif
 
 
 #include <stdlib.h>
@@ -24,6 +19,12 @@
 #include <cppconn/prepared_statement.h>
 
 using namespace std;
+
+#ifdef _DEBUG
+#pragma comment(lib, "mysqlcppconn.lib")
+#else
+#pragma comment(lib, "MySQL\\Release\\mysqlcppconn.lib")
+#endif
 
 
 
