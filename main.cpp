@@ -1,25 +1,30 @@
-#include <stdlib.h>
-#include <iostream>
-#include "Server.h"
-#include "Client.h"
-#include "mysql_driver.h" 
-#include "mysql_connection.h"
-
-#include <thread>
-#include <chrono>
-
-#include <mysql.h>
-#include <cppconn/driver.h>
-#include <cppconn/exception.h>
-#include <cppconn/prepared_statement.h>
-
-using namespace std;
+#pragma comment (lib, "libmysql.lib")
 
 #ifdef _DEBUG
 #pragma comment(lib, "mysqlcppconn.lib")
 #else
 #pragma comment(lib, "MySQL\\Release\\mysqlcppconn.lib")
 #endif
+
+
+#include <stdlib.h>
+#include <iostream>
+#include "Server.h"
+#include "Client.h"
+
+#include <thread>
+#include <chrono>
+
+#include <mysql.h>
+
+#include "mysql_driver.h" 
+#include "mysql_connection.h"
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/prepared_statement.h>
+
+using namespace std;
+
 
 
 int main() {
@@ -36,55 +41,55 @@ int main() {
 
 
     try {
-        // MySQL µå¶óÀÌ¹ö ÀÎ½ºÅÏ½º¸¦ °¡Á®¿É´Ï´Ù.
+        // MySQL ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É´Ï´ï¿½.
         driver = sql::mysql::get_driver_instance();
 
-        // µ¥ÀÌÅÍº£ÀÌ½º¿¡ ¿¬°áÇÕ´Ï´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         const string server = "tcp://127.0.0.1:3306";
         const string name = "root";
         const string password = "dlaalsgur5162!";
         std::unique_ptr<sql::Connection> conn(driver->connect(server, name, password));
 
-        // µ¥ÀÌÅÍº£ÀÌ½º ÀÛ¾÷À» ¼öÇàÇÕ´Ï´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½Ì½ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         conn->setSchema("securityproj");
 
-        // Äõ¸® ½ÇÇà
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         std::unique_ptr<sql::Statement> stmt(conn->createStatement());
 
         stmt->execute("create table if not exists department(departmentName varchar(20) not null,\
-                                                              revenue bigint null,\
-                                                              CostofGoodsSold bigint null,\
-                                                              OperatingExpenses bigint null,\
-                                                              NonOperatingExpenses bigint null,\
-                                                              CurrentAssets bigint null,\
-                                                              NonCurrentAssets bigint null,\
-                                                              CurrentLiability bigint null,\
-                                                              NonCurrentLiability bigint null,\
-                                                              CapitalStock bigint null,\
-                                                              RetainedEarning bigint null\
-                                                              )");
+                                                            revenue bigint null,\
+                                                            CostofGoodsSold bigint null,\
+                                                            OperatingExpenses bigint null,\
+                                                            NonOperatingExpenses bigint null,\
+                                                            CurrentAssets bigint null,\
+                                                            NonCurrentAssets bigint null,\
+                                                            CurrentLiability bigint null,\
+                                                            NonCurrentLiability bigint null,\
+                                                            CapitalStock bigint null,\
+                                                            RetainedEarning bigint null\
+                                                            )");
 
 
         stmt->execute("create table if not exists analyzedData(departmentName varchar(20) not null,\
-                                                              GrossProfit bigint null,\
-                                                              OperatingProfit bigint null,\
-                                                              NetProfit bigint null,\
-                                                              TotalAssets bigint null, \
-                                                              TotalLiabilities bigint null,\
-                                                              TotalEquity bigint null\
-                                                              )");
-                                                              
+                                                            GrossProfit bigint null,\
+                                                            OperatingProfit bigint null,\
+                                                            NetProfit bigint null,\
+                                                            TotalAssets bigint null, \
+                                                            TotalLiabilities bigint null,\
+                                                            TotalEquity bigint null\
+                                                            )");
+                                                        
 
         stmt->execute("create table if not exists departmentKey(departmentName varchar(20) not null,\
-                                                              publicKey bigint null\
-                                                              )");
+                                                            publicKey bigint null\
+                                                            )");
 
 
         std::unique_ptr<sql::ResultSet> department(stmt->executeQuery("SELECT * FROM department"));
         std::unique_ptr<sql::ResultSet> deparmentKey(stmt->executeQuery("SELECT * FROM departmentkey"));
         std::unique_ptr<sql::ResultSet> analyzedData(stmt->executeQuery("SELECT * FROM analyzeddata"));
 
-        // °á°ú Ã³¸®
+        // ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         while (department && department->next()) {
             std::cout << department->getString(1) << " " << department->getString(2) << std::endl;
         }

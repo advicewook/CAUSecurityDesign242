@@ -1,6 +1,16 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include "openfhe.h"
+#include <boost/asio.hpp>
+#include <iostream>
+#include "openfhe.h"
+
+using namespace boost::asio;
+using ip::tcp;
+using namespace std;
+using namespace lbcrypto;
+
 void startServer();  // Declare the startServer function
 
 void handleClient(tcp::socket& socket, CryptoContext<DCRTPoly>& cc, KeyPair<DCRTPoly>& keyPair);  // Declare the handleClient function
@@ -35,6 +45,8 @@ void sendEncryptedData(tcp::socket& socket, Ciphertext<DCRTPoly>& ciphertext);
 // Function to receive encrypted data from the client
 Ciphertext<DCRTPoly> receiveEncryptedData(tcp::socket& socket, CryptoContext<DCRTPoly>& cc);
 
+// Function to decrypt ciphertext and print the result
+void decryptAndPrint(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc);
 
 
 #endif

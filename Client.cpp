@@ -48,17 +48,17 @@ void startClient() {
         cc->Enable(ADVANCEDSHE);
         cc->Enable(FHE);
 
-        //calculate encryption 
-        Plaintext plaintext = cc->MakeCKKSPackedPlaintext({1.0, 2.0, 3.0, 4.0});
-        auto ciphertext = cc->Encrypt(publicKey, plaintext);
+        // //calculate encryption 
+        // Plaintext plaintext = cc->MakeCKKSPackedPlaintext({1.0, 2.0, 3.0, 4.0});
+        // auto ciphertext = cc->Encrypt(publicKey, plaintext);
 
 
-        //send encrypted data to server
-        std::stringstream cipherStream;
-        Serial::Serialize(ciphertext, cipherStream, SerType::BINARY);
-        std::string encryptedData = cipherStream.str();
+        // //send encrypted data to server
+        // std::stringstream cipherStream;
+        // Serial::Serialize(ciphertext, cipherStream, SerType::BINARY);
+        // std::string encryptedData = cipherStream.str();
 
-        boost::asio::write(socket, boost::asio::buffer(encryptedData));
+        // boost::asio::write(socket, boost::asio::buffer(encryptedData));
 
         // std::cout << "Connected to server!" << std::endl;
 
@@ -75,12 +75,49 @@ void startClient() {
     }
 }
 
+void sendToServer(tcp::socket& socket, const std::string& message) {
+    boost::asio::write(socket, boost::asio::buffer(message));
+}
 
+void sendEncryptedData(tcp::socket& socket, Ciphertext<DCRTPoly>& ciphertext) {
+    // 암호문 직렬화
+    std::stringstream ss;
+    Serial::Serialize(ciphertext, ss, SerType::BINARY);
+    std::string serializedCiphertext = ss.str();
+    sendToServer(socket, serializedCiphertext);
+}
+
+Plaintext encodeData(const std::vector<double>& data, CryptoContext<DCRTPoly>& cc) {
+    Plaintext plaintext;
+    plaintext = cc->MakeCKKSPackedPlaintext(data);
+    return plaintext;
+}
+
+Ciphertext<DCRTPoly> encryptPlaintext(Plaintext& plaintext, PublicKey<DCRTPoly>& publicKey, CryptoContext<DCRTPoly>& cc) {
+    return cc->Encrypt(publicKey, plaintext);
+}
+
+std::vector<double> decryptCiphertextVector(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc) {
+    Plaintext decrypted_ptx;
+    cc->Decrypt(secretKey, ciphertext, &decrypted_ptx);
+
+    std::vector<double> decrypted_msg = decrypted_ptx->GetRealPackedValue();
+
+    return decrypted_msg;
+}
+
+Ciphertext<DCRTPoly> encryptNumber(int64_t number, PublicKey<DCRTPoly>& publicKey, CryptoContext<DCRTPoly>& cc) {
+    // 숫자를 평문으로 인코딩
+    std::vector<double> data = { static_cast<double>(number) };
+    Plaintext plaintext;
+    plaintext = cc->MakeCKKSPackedPlaintext(data);
+    
+    // 평문 암호화
+    return cc->Encrypt(publicKey, plaintext);
+}
 
 int main() {
-    private PublicKey<DCRTPoly> publicKey;
-
-
+    PublicKey<DCRTPoly> publicKey;
 
     startClient();
     return 0;

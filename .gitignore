@@ -369,6 +369,7 @@ FodyWeavers.xsd
 CMakeCache.txt
 cmake_install.cmake
 Makefile
+CMakeLists.txt
 
 # Ignore user-specific configuration files
 .idea/
@@ -391,3 +392,4 @@ compile_commands.json
 # Ignore Visual Studio Code files and directories
 .vscode/
 *.code-workspace
+

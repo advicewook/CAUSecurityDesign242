@@ -45,7 +45,7 @@ int main(){
     auto keyPair = cc->KeyGen();
     cc->EvalMultKeyGen(keyPair.secretKey);
 
-        std::vector<double> msg1 = {1.0, 2.0, 3.0, 4.0};
+    std::vector<double> msg1 = {1.0, 2.0, 3.0, 4.0};
     std::vector<double> msg2 = {5.0, 6.0, 7.0, 8.0};
 
     std::cout << "msg1: " << msg1 << std::endl;

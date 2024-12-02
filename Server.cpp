@@ -6,6 +6,7 @@
 using namespace boost::asio;
 using ip::tcp;
 using namespace lbcrypto;
+using namespace std;
 
 
 void handleClient(tcp::socket& socket, CryptoContext<DCRTPoly>& cc, KeyPair<DCRTPoly>& keyPair){
@@ -87,6 +88,70 @@ void startServer() {
     }
 }
 
+
+Plaintext encodeData(const std::vector<double>& data, CryptoContext<DCRTPoly>& cc) {
+    Plaintext plaintext;
+    plaintext = cc->MakeCKKSPackedPlaintext(data);
+    return plaintext;
+}
+
+Ciphertext<DCRTPoly> encryptPlaintext(Plaintext& plaintext, PublicKey<DCRTPoly>& publicKey, CryptoContext<DCRTPoly>& cc) {
+    return cc->Encrypt(publicKey, plaintext);
+}
+
+Plaintext decryptCiphertext(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc) {
+    return cc->Decrypt(secretKey, ciphertext);
+}
+
+Ciphertext<DCRTPoly> addCiphertexts(Ciphertext<DCRTPoly>& ct1, Ciphertext<DCRTPoly>& ct2, CryptoContext<DCRTPoly>& cc) {
+    return cc->Add(ct1, ct2);
+}
+
+Ciphertext<DCRTPoly> multiplyCiphertexts(Ciphertext<DCRTPoly>& ct1, Ciphertext<DCRTPoly>& ct2, CryptoContext<DCRTPoly>& cc) {
+    return cc->Multiply(ct1, ct2);
+}
+
+Ciphertext<DCRTPoly> multiplyCiphertextByScalar(Ciphertext<DCRTPoly>& ct, double scalar, CryptoContext<DCRTPoly>& cc) {
+    return cc->Multiply(ct, scalar);
+}
+
+Ciphertext<DCRTPoly> rotateCiphertext(Ciphertext<DCRTPoly>& ct, int steps, CryptoContext<DCRTPoly>& cc) {
+    return cc->Rotate(ct, steps);
+}
+
+Ciphertext<DCRTPoly> bootstrapCiphertext(Ciphertext<DCRTPoly>& ct, CryptoContext<DCRTPoly>& cc) {
+    return cc->Bootstrap(ct);
+}
+
+void sendEncryptedData(tcp::socket& socket, Ciphertext<DCRTPoly>& ciphertext) {
+    std::stringstream ss;
+    Serial::Serialize(ciphertext, ss, SerType::BINARY);
+    std::string serializedCiphertext = ss.str();
+    boost::asio::write(socket, boost::asio::buffer(serializedCiphertext));
+}
+
+Ciphertext<DCRTPoly> receiveEncryptedData(tcp::socket& socket, CryptoContext<DCRTPoly>& cc) {
+    std::vector<char> buf(4096);
+    size_t len = socket.read_some(boost::asio::buffer(buf));
+    std::string ciphertextStr(buf.data(), len);
+    
+    std::stringstream ss(ciphertextStr);
+    Ciphertext<DCRTPoly> ciphertext;
+    Serial::Deserialize(ciphertext, ss, SerType::BINARY);
+    return ciphertext;
+}
+
+void decryptAndPrint(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc) {
+    // 복호화
+    Plaintext plaintext = cc->Decrypt(secretKey, ciphertext);
+    
+    // 평문에서 숫자 추출
+    vector<double> result;
+    plaintext->GetRealPackedValue(result);
+    
+    // 결과 출력
+    cout << "복호화된 숫자: " << result[0] << endl;
+}
 
 int main(){
     startServer();
