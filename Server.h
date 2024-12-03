@@ -48,4 +48,7 @@ Ciphertext<DCRTPoly> receiveEncryptedData(tcp::socket& socket, CryptoContext<DCR
 void decryptAndPrint(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc);
 
 
+void severSQL();
+
+
 #endif
