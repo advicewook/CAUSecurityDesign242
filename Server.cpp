@@ -119,27 +119,36 @@ Ciphertext<DCRTPoly> encryptPlaintext(Plaintext& plaintext, PublicKey<DCRTPoly>&
 }
 
 Plaintext decryptCiphertext(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc) {
-    return cc->Decrypt(secretKey, ciphertext);
-}
+
+    Plaintext decrypted_ptx;
+    cc-> Decrypt(secretKey, ciphertext, &decrypted_ptx);
+    //decrypted_text->SetLength(4);
+
+    std::vector<int64_t> decrypted_msg = decrypted_ptx->GetPackedValue();
+
+    std::cout << "decrypted msg: " << decrypted_msg << std::endl;
+
+    return decrypted_msg;
+    }
 
 Ciphertext<DCRTPoly> addCiphertexts(Ciphertext<DCRTPoly>& ct1, Ciphertext<DCRTPoly>& ct2, CryptoContext<DCRTPoly>& cc) {
-    return cc->Add(ct1, ct2);
+    return cc->EvalAdd(ct1, ct2);
 }
 
 Ciphertext<DCRTPoly> multiplyCiphertexts(Ciphertext<DCRTPoly>& ct1, Ciphertext<DCRTPoly>& ct2, CryptoContext<DCRTPoly>& cc) {
-    return cc->Multiply(ct1, ct2);
+    return cc->EvalMult(ct1, ct2);
 }
 
 Ciphertext<DCRTPoly> multiplyCiphertextByScalar(Ciphertext<DCRTPoly>& ct, double scalar, CryptoContext<DCRTPoly>& cc) {
-    return cc->Multiply(ct, scalar);
+    return cc->EvalMult(ct, scalar);
 }
 
-Ciphertext<DCRTPoly> rotateCiphertext(Ciphertext<DCRTPoly>& ct, int steps, CryptoContext<DCRTPoly>& cc) {
-    return cc->Rotate(ct, steps);
-}
+// Ciphertext<DCRTPoly> rotateCiphertext(Ciphertext<DCRTPoly>& ct, int steps, CryptoContext<DCRTPoly>& cc) {
+//     return cc->Rotate(ct, steps);
+// }
 
 Ciphertext<DCRTPoly> bootstrapCiphertext(Ciphertext<DCRTPoly>& ct, CryptoContext<DCRTPoly>& cc) {
-    return cc->Bootstrap(ct);
+    return cc->EvalBootstrap(ct);
 }
 
 void sendEncryptedData(tcp::socket& socket, Ciphertext<DCRTPoly>& ciphertext) {
@@ -162,7 +171,7 @@ Ciphertext<DCRTPoly> receiveEncryptedData(tcp::socket& socket, CryptoContext<DCR
 
 void decryptAndPrint(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc) {
     // 복호화
-    Plaintext plaintext = cc->Decrypt(secretKey, ciphertext);
+    Plaintext plaintext = decryptCiphertext(ciphertext, secretKey, cc);
     
     // 평문에서 숫자 추출
     vector<double> result;

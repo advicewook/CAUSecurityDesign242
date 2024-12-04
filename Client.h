@@ -30,4 +30,5 @@ std::vector<double> decryptCiphertextVector(Ciphertext<DCRTPoly>& ciphertext, co
 
 
 
+
 #endif
