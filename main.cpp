@@ -42,21 +42,27 @@ int main() {
 
 
     try {
-        // MySQL ����̹� �ν��Ͻ��� �����ɴϴ�.
+        // sql driver 가져오기
         driver = sql::mysql::get_driver_instance();
 
-        // �����ͺ��̽��� �����մϴ�.
+        // sql server 연결
         const string server = "tcp://127.0.0.1:3306";
         const string name = "root";
         const string password = "dlaalsgur5162!";
         std::unique_ptr<sql::Connection> conn(driver->connect(server, name, password));
+        
+        std::unique_ptr<sql::Statement> stmt(conn->createStatement());
+        
+        //database 없으면 생성
+        stmt->execute("create database if not exists securityproj");
 
-        // �����ͺ��̽� �۾��� �����մϴ�.
+        //db 연결
         conn->setSchema("securityproj");
 
-        // ���� ����
-        std::unique_ptr<sql::Statement> stmt(conn->createStatement());
 
+        // 만약 sql 에 table이 없다면 생성
+
+        // encrypted input data
         stmt->execute("create table if not exists department(departmentName varchar(20) not null,\
                                                             revenue bigint null,\
                                                             CostofGoodsSold bigint null,\
@@ -71,6 +77,7 @@ int main() {
                                                             )");
 
 
+        //encrypted calculated data
         stmt->execute("create table if not exists analyzedData(departmentName varchar(20) not null,\
                                                             GrossProfit bigint null,\
                                                             OperatingProfit bigint null,\
@@ -80,17 +87,42 @@ int main() {
                                                             TotalEquity bigint null\
                                                             )");
                                                         
-
+        // each dapartment's public key
         stmt->execute("create table if not exists departmentKey(departmentName varchar(20) not null,\
                                                             publicKey bigint null\
                                                             )");
 
+        // final financial table (decrypted)
+        stmt->execute("create table if not exists financialStatements(departmentName varchar(20) not null,\
+                                                            year int null,\
+                                                            quater int null,\
+                                                            revenue int null,\
+                                                            CostofGoodsSold int null,\
+                                                            OperatingExpenses int null,\
+                                                            NonOperatingExpenses int null,\
+                                                            CurrentAssets int null,\
+                                                            NonCurrentAssets int null,\
+                                                            CurrentLiability int null,\
+                                                            NonCurrentLiability int null,\
+                                                            CapitalStock int null,\
+                                                            RetainedEarning int null,\
+                                                            GrossProfit int null,\
+                                                            OperatingProfit int null,\
+                                                            NetProfit int null,\
+                                                            TotalAssets int null, \
+                                                            TotalLiabilities int null,\
+                                                            TotalEquity int null\
+                                                            )");
+
+
+        // 각 table의 값 전부 읽어오기
 
         std::unique_ptr<sql::ResultSet> department(stmt->executeQuery("SELECT * FROM department"));
         std::unique_ptr<sql::ResultSet> deparmentKey(stmt->executeQuery("SELECT * FROM departmentkey"));
         std::unique_ptr<sql::ResultSet> analyzedData(stmt->executeQuery("SELECT * FROM analyzeddata"));
+        std::unique_ptr<sql::ResultSet> finanacialStatement(stmt->executeQuery("SELECT * FROM analyzeddata"));
 
-        // ��� ó��
+        // 출력
         while (department && department->next()) {
             std::cout << department->getString(1) << " " << department->getString(2) << std::endl;
         }
