@@ -22,6 +22,7 @@ private:
     long long calculateTotalLiabilities(long long currentLiabilities, long long nonCurrentLiabilities);
     long long calculateTotalEquity(long long totalAssets, long long totalLiabilities);
     double calculatePercentageChange(long long previous, long long current);
+    void displayPreviousData(const std::string& departmentName);
 
 };
 
