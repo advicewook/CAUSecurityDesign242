@@ -56,6 +56,44 @@ std::string FinancialAnalyzer::getInvestRecommendation(double percentage) {
     }
 }
 
+bool FinancialAnalyzer::analyzeAndInsertData(const std::string& departmentName) {
+    // Step 1: Fetch encrypted department data
+    auto encryptedData = dbManager.fetchDepartmentData();
+    
+    // Find the data for the specified department
+    for (const auto& row : encryptedData) {
+        if (row[0].getDepartmentName() == departmentName) { // Assuming you can access department name somehow
+            // Step 2: Perform analysis on the encrypted data
+            // Here, you would implement your logic to analyze the data
+            // This is a placeholder for the analysis process
+            std::vector<Ciphertext<DCRTPoly>> analyzedData;
+
+            // Example analysis (you need to replace this with actual analysis logic)
+            Ciphertext<DCRTPoly> grossProfit; // Calculate gross profit
+            Ciphertext<DCRTPoly> operatingProfit; // Calculate operating profit
+            Ciphertext<DCRTPoly> netProfit; // Calculate net profit
+            Ciphertext<DCRTPoly> totalAssets; // Calculate total assets
+            Ciphertext<DCRTPoly> totalLiabilities; // Calculate total liabilities
+            Ciphertext<DCRTPoly> totalEquity; // Calculate total equity
+
+            analyzedData.push_back(grossProfit);
+            analyzedData.push_back(operatingProfit);
+            analyzedData.push_back(netProfit);
+            analyzedData.push_back(totalAssets);
+            analyzedData.push_back(totalLiabilities);
+            analyzedData.push_back(totalEquity);
+
+            // Step 3: Insert analyzed data into the analyzedData table
+            return dbManager.insertAnalyzedData(departmentName, analyzedData);
+        }
+    }
+
+    // If the department is not found
+    std::cerr << "Department not found: " << departmentName << std::endl;
+    return false;
+}
+
+
 
 // void FinancialAnalyzer::processDepartmentData(DBManager& dbManager, CryptoContext<DCRTPoly>& cc, PublicKey<DCRTPoly>& publicKey) {
 //     auto encryptedData = dbManager.fetchDepartmentData();

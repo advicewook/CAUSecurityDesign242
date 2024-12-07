@@ -35,7 +35,7 @@ void sendPublicKey(tcp::socket& socket, const PublicKey<DCRTPoly>& publicKey) {
 }
 
 
-//데이터를 넣으면서 analyzedData도 갱신
+//데이터를 넣음(갱신)
 void handleDepartmentRequest(tcp::socket& socket, CryptoContext<DCRTPoly>& cc, KeyPair<DCRTPoly>& keyPair, DBManager& DBManager) {
     // Encrypted data from client
     std::vector<char> buf(4096);
@@ -199,17 +199,6 @@ Ciphertext<DCRTPoly> receiveEncryptedData(tcp::socket& socket, CryptoContext<DCR
     return ciphertext;
 }
 
-// void decryptAndPrint(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc) {
-//     // 복호화
-//     Plaintext plaintext = decryptCiphertext(ciphertext, secretKey, cc);
-    
-//     // 평문에서 숫자 추출
-//     vector<double> result;
-//     plaintext->GetRealPackedValue(result);
-    
-//     // 결과 출력
-//     cout << "복호화된 숫자: " << result[0] << endl;
-// }
 
 /////////////////////DB////////////////////////
 
@@ -328,62 +317,6 @@ void serverSQL(){
 
 }
 
-// Ciphertext<DCRTPoly> getCurrentCiphertextFromDepartment(const std::string& department, const std::string& label) {
-//     sql::mysql::MySQL_Driver* driver;
-//     Ciphertext<DCRTPoly> ciphertext;
-
-//     try {
-//         driver = sql::mysql::get_driver_instance();
-//         std::unique_ptr<sql::Connection> conn(driver->connect("tcp://127.0.0.1:3306", "root", "dlaalsgur5162!"));
-//         conn->setSchema("securityproj");
-
-//         // Prepare the SQL statement to get the current value
-//         std::string query = "SELECT " + label + " FROM department WHERE departmentName = ?";
-//         std::unique_ptr<sql::PreparedStatement> pstmt(conn->prepareStatement(query));
-//         pstmt->setString(1, department);
-
-//         std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery());
-//         if (res->next()) {
-//             // Assuming the label corresponds to the first column
-//             std::string encryptedData = res->getString(label);
-//             std::stringstream ss(encryptedData);
-//             Serial::Deserialize(ciphertext, ss, SerType::BINARY);
-//         }
-//     } catch (sql::SQLException& e) {
-//         std::cerr << "SQLException: " << e.what() << std::endl;
-//     } catch (std::exception& e) {
-//         std::cerr << "Exception: " << e.what() << std::endl;
-//     }
-
-//     return ciphertext;
-// }
-
-// bool saveEncryptedDataToDepartment(const std::string& department, const std::string& label, const Ciphertext<DCRTPoly>& ciphertext) {
-//     sql::mysql::MySQL_Driver* driver;
-
-//     try {
-//         driver = sql::mysql::get_driver_instance();
-//         std::unique_ptr<sql::Connection> conn(driver->connect("tcp://127.0.0.1:3306", "root", "dlaalsgur5162!"));
-//         conn->setSchema("securityproj");
-
-//         // Prepare the SQL statement to update the specified label in the department table
-//         std::string query = "UPDATE department SET " + label + " = ? WHERE departmentName = ?";
-//         std::unique_ptr<sql::PreparedStatement> pstmt(conn->prepareStatement(query));
-//         std::stringstream ss;
-//         Serial::Serialize(ciphertext, ss, SerType::BINARY);
-//         pstmt->setString(1, ss.str());
-//         pstmt->setString(2, department);
-//         pstmt->executeUpdate();
-
-//         return true;
-//     } catch (sql::SQLException& e) {
-//         std::cerr << "SQLException: " << e.what() << std::endl;
-//         return false;
-//     } catch (std::exception& e) {
-//         std::cerr << "Exception: " << e.what() << std::endl;
-//         return false;
-//     }
-// }
 
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

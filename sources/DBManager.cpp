@@ -57,6 +57,7 @@ void DBManager::createTables() {
                 "TotalEquity int null);");
 }
 
+
 Ciphertext<DCRTPoly> DBManager::getCurrentCiphertextFromDepartment(const std::string& department, const std::string& label) {
     Ciphertext<DCRTPoly> ciphertext;
 
@@ -145,7 +146,7 @@ double DBManager::calculateGrowthRate(const std::string& department, const std::
 }
 
 
-// 부서 데이터 가져오기
+// 부서 데이터 가져오기 - 사용할 부분 확인하기! 어디서 analyzedData를 갱신할 것인가.. 
 std::vector<std::vector<Ciphertext<DCRTPoly>>> DBManager::fetchDepartmentData() {
     std::vector<std::vector<Ciphertext<DCRTPoly>>> encryptedData;
 
@@ -183,7 +184,7 @@ std::vector<std::vector<Ciphertext<DCRTPoly>>> DBManager::fetchDepartmentData() 
     return encryptedData;
 }
 
-// 분석된 데이터 삽입
+// 분석된 데이터 삽입 - 사용할 부분 확인하기!
 bool DBManager::insertAnalyzedData(const std::string& departmentName, const std::vector<Ciphertext<DCRTPoly>>& encryptedData) {
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement("INSERT INTO analyzedData (departmentName, GrossProfit, "
