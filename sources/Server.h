@@ -5,14 +5,17 @@
 #include <iostream>
 #include "openfhe.h"
 
+#include "DBManager.h"
+#include "FinancialAnalyzer.h"
+
 using namespace boost::asio;
 using ip::tcp;
 using namespace std;
 using namespace lbcrypto;
 
-void startServer();  // Declare the startServer function
+void startServer(FinancialAnalyzer& FinancialAnalyzer, DBManager& DBManager );  // Declare the startServer function
 
-void handleClient(tcp::socket& socket, CryptoContext<DCRTPoly>& cc, KeyPair<DCRTPoly>& keyPair);  // Declare the handleClient function
+void handleClient(tcp::socket& socket, CryptoContext<DCRTPoly>& cc, KeyPair<DCRTPoly>& keyPair, FinancialAnalyzer& financialAnalyzer, DBManager& DBManager);  // Declare the handleClient function
 
 // Function to encode data into plaintext
 Plaintext encodeData(const std::vector<double>& data, CryptoContext<DCRTPoly>& cc);
@@ -47,8 +50,17 @@ Ciphertext<DCRTPoly> receiveEncryptedData(tcp::socket& socket, CryptoContext<DCR
 // Function to decrypt ciphertext and print the result
 void decryptAndPrint(Ciphertext<DCRTPoly>& ciphertext, const PrivateKey<DCRTPoly>& secretKey, CryptoContext<DCRTPoly>& cc);
 
+void provideInvestmentData(tcp::socket& socket);
 
-void severSQL();
 
+void serverSQL();
+
+void sendPublicKey(tcp::socket& socket, PublicKey<DCRTPoly>& publicKey);
+
+void handleDepartmentRequest(tcp::socket& socket, CryptoContext<DCRTPoly>& cc, KeyPair<DCRTPoly>& keyPair, DBManager& DBManager);
+
+void handleInvestorRequest(tcp::socket& socket, FinancialAnalyzer& financialAnalyzer);
+
+bool saveEncryptedDataToDatabase(const std::string& encryptedData);
 
 #endif

@@ -5,11 +5,15 @@
 #include <iostream>
 #include "openfhe.h"
 
+#include "DepartmentHandler.h"
+#include "InvestorHandler.h"
 
 using namespace boost::asio;
 using ip::tcp;
 using namespace std;
 using namespace lbcrypto;
+
+void modeSelection();  // Declare the modeSelection function
 
 void startClient();  // Declare the startClient function
 
